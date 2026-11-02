@@ -4,7 +4,7 @@ ORIG = 'ph.telegra.Telegraph'
 NEW  = 'ph.stogra.stograph'
 DIR  = 'build-system/fake-codesigning/profiles'
 
-result = subprocess.run(['security', 'find-identity', '-v', '-p', 'codesigning', 'temp.keychain'],
+result = subprocess.run(['security', 'find-identity', '-p', 'codesigning', 'temp.keychain'],
                         capture_output=True, text=True)
 m = re.search(r'\) [0-9A-F]+ "(.*?)"', result.stdout)
 if not m:
