@@ -1,4 +1,4 @@
-import os, sys, plistlib, subprocess, tempfile, re
+import datetime, os, sys, plistlib, subprocess, tempfile, re
 
 ORIG = 'ph.telegra.Telegraph'
 NEW  = 'ph.stogra.stograph'
@@ -20,6 +20,16 @@ for fname in sorted(os.listdir(DIR)):
     fpath = os.path.join(DIR, fname)
     dec = subprocess.run(['security', 'cms', '-D', '-i', fpath], capture_output=True, check=True)
     data = plistlib.loads(dec.stdout)
+    # These are fake, locally re-signed profiles with no real Apple-issued
+    # validity window of their own, so there's no reason their baked-in
+    # ExpirationDate should ever be allowed to lapse: bump it fresh on every
+    # patch run instead of letting a build start failing once the original
+    # date (whatever it happened to be when this profile was captured) is
+    # in the past - bazel's ios_extension/ios_application rules reject an
+    # expired ExpirationDate outright ("provisioning profile ExpirationDate
+    # (...) is in the past"), even for a profile nothing but this script
+    # will ever re-verify.
+    data['ExpirationDate'] = datetime.datetime.utcnow() + datetime.timedelta(days=3650)
     ent = data.get('Entitlements', {})
     for key in list(ent.keys()):
         v = ent[key]
