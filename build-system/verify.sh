@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 export TELEGRAM_ENV_SET="1"
 
