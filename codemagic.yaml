@@ -45,6 +45,19 @@ workflows:
           # matrix.metal here), regardless of which Xcode ends up selected above.
           sudo xcodebuild -downloadComponent MetalToolchain
 
+      - name: Install build tools (gperf)
+        script: |
+          set -e
+          # third-party/td's CMake configure step (tdutils/generate) shells
+          # out to gperf to build a generated perfect-hash table and isn't
+          # vendored or built from source - it has to already be on PATH.
+          # Reproduced locally (Linux, same td commit) to confirm: without
+          # it, cmake fails outright with "Could NOT find gperf", which is
+          # what's actually behind the td genrule failing - bazel's error
+          # just dumps the whole failing shell command, burying the real
+          # cmake error far above what --verbose_failures tends to show.
+          brew install gperf
+
       - name: Create canonical source directory
         script: |
           set -e
