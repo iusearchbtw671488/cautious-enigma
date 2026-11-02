@@ -36,6 +36,15 @@ workflows:
             echo "Xcode ${XCODE_VERSION} not found, using default: $(xcode-select -p)"
           fi
 
+      - name: Download Metal Toolchain
+        script: |
+          set -e
+          # Xcode 16+ ships Metal as an optional, separately downloaded component.
+          # Without it, `xcrun metal` fails with "missing Metal Toolchain" the
+          # first time anything needs to compile a .metal shader (PremiumUI's
+          # matrix.metal here), regardless of which Xcode ends up selected above.
+          sudo xcodebuild -downloadComponent MetalToolchain
+
       - name: Create canonical source directory
         script: |
           set -e
