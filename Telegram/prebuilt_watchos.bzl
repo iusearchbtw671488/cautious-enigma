@@ -1,4 +1,4 @@
-﻿"""Embeds the standalone, xcodebuild-built tgwatch watch app into the Bazel iOS build.
+"""Embeds the standalone, xcodebuild-built tgwatch watch app into the Bazel iOS build.
 
 `apple_prebuilt_watchos_application` builds the watch app in two actions and exposes
 it through the providers that `ios_application(watch_application = ...)` consumes:

@@ -1,4 +1,4 @@
-﻿
+
 telegram_bundle_id = "ph.stogra.stograph"
 telegram_api_id = "8"
 telegram_api_hash = "7245de8e747a0d6fbe11f7cc14fcc0bb"
