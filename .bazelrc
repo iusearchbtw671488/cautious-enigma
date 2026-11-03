@@ -1,5 +1,14 @@
 build --action_env=ZERO_AR_DATE=1
 
+# Forward PATH into actions. Without this, Bazel genrules (third-party/td's
+# td_build in particular) don't see tools installed via `brew install` on the
+# CI runner even though --spawn_strategy=standalone means the action isn't
+# sandboxed - Bazel still substitutes its own fixed default PATH for actions
+# unless told to pass the invoking shell's PATH through. Confirmed locally:
+# td's CMake generate step calls gperf, brew puts it on /opt/homebrew/bin, and
+# without this line the genrule's cmd_bash never sees it on PATH regardless.
+build --action_env=PATH
+
 build --enable_platform_specific_config
 
 # Download dependencies directly if the remote downloader configured by --cacheHost fails.
