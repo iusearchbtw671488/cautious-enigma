@@ -14,7 +14,13 @@ def is_apple_silicon():
 def get_clean_env(use_clean_env=True):
     clean_env = os.environ.copy()
     if use_clean_env:
-        clean_env['PATH'] = '/usr/bin:/bin:/usr/sbin:/sbin'
+        # /opt/homebrew/bin (Apple Silicon) and /usr/local/bin (Intel) are
+        # included deliberately: third-party/td's td_build genrule shells out
+        # to `gperf`, which isn't vendored and is only ever installed via
+        # Homebrew in CI. Without these, bazel's actions (which inherit this
+        # same "clean" PATH via --action_env=PATH) can't find it even though
+        # `brew install gperf` already succeeded on the host.
+        clean_env['PATH'] = '/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/usr/local/bin'
     return clean_env
 
 
