@@ -1,7 +1,7 @@
 import datetime, os, sys, plistlib, subprocess, tempfile, re
 
 ORIG = 'ph.telegra.Telegraph'
-NEW  = 'ph.stogra.stograph'
+NEW  = 'com.hundredgram'
 DIR  = 'build-system/fake-codesigning/profiles'
 
 result = subprocess.run(['security', 'find-identity', '-p', 'codesigning', 'temp.keychain'],
